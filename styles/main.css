@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comfortaa', cursive;
+    margin: 0;
+    /*background-color: #F3F6FD;*/
+    background-color: #1f1f1f;
+}
+
+.app {
+    display: flex;
+}
+
+.logo {
+    margin-bottom: 50px;
+}
+
+.panel {
+    background-color: white;
+    min-height: 100vh;
+    padding: 30px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    padding: 10px;
+}
+
+.menu__list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+
+}
+
+.menu__item {
+    background: #ffffff;
+    box-shadow: 0px 8px 14px rgba(62, 107, 224, 0.12);
+    border-radius: 14px;
+    border: none;
+    height: 45px;
+    width: 45px;
+    cursor: pointer;
+    padding: 10px;
+
+}
+
+.menu__item:hover {
+    background: #6A6AFB;
+}
+
+.menu__item:hover img {
+    filter: brightness(0) invert(1);
+}
+
+.menu__item__active {
+    background: #6A6AFB;
+
+}
+
+.menu__item__active img {
+    filter: brightness(0) invert(1);
+}
+
+.menu__add {
+    background: none;
+    border: 1px solid #CAD5FF;
+    border-radius: 14px;
+    height: 45px;
+    width: 45px;
+    cursor: pointer;
+    padding: 12px 11px;
+
+}
+
+.menu__add:hover {
+ background: #E7EBFF;
+}
