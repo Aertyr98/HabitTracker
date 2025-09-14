@@ -10,6 +10,9 @@
       },
       {
         "comment": "The is easier"
+      },
+      {
+        "comment": "Third"
       }
     ]
   },
@@ -21,6 +24,17 @@
     "days": [
       {
         "comment": "Cool"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Drink 2l a day",
+    "target": "30",
+    "icon": "water",
+    "days": [
+      {
+        "comment": "1st day is good!"
       }
     ]
   }

@@ -14,7 +14,10 @@ const page = {
     },
     content: {
         daysContainer: document.getElementById('days'),
-        nextDay: document.querySelector('.habbit__day')
+        nextDay: document.querySelector('.habbit__day'),
+        headerEl: document.querySelector('header'),
+        mainEl: document.querySelector('main'),
+        emptyEl: document.getElementById('empty-state'),
     },
     popup: {
         index: document.getElementById('add-habbit-popup'),
@@ -26,8 +29,8 @@ const page = {
 /* utils */
 
 function loadData() {
-    const habbitsString = localStorage.getItem('HABBIT_KEY');
-    const habbitArray = JSON.parse(habbitsString);
+    const habbitsString = localStorage.getItem(HABBIT_KEY);
+    const habbitArray = JSON.parse(habbitsString || '[]');
     if (Array.isArray(habbitArray)) {
         habbits = habbitArray;
     }
@@ -42,6 +45,18 @@ function togglePopup() {
         page.popup.index.classList.remove('cover_hidden');
     } else {
         page.popup.index.classList.add('cover_hidden');
+    }
+}
+
+function toggleEmptyLayout(isEmpty) {
+    if (isEmpty) {
+        page.content.emptyEl.style.display = '';
+        page.content.headerEl.style.display = 'none';
+        page.content.mainEl.style.display = 'none';
+    } else {
+        page.content.emptyEl.style.display = 'none';
+        page.content.headerEl.style.display = '';
+        page.content.mainEl.style.display = '';
     }
 }
 
@@ -90,7 +105,7 @@ function rerenderMenu(activeHabbit) {
             element.setAttribute('menu-habbit-id', habbit.id);
             element.classList.add('menu__item');
             element.addEventListener('click', () => rerender(habbit.id));
-            element.innerHTML = `<img src="../assets/img/${habbit.icon}.svg" alt="${habbit.name}" />`;
+            element.innerHTML = `<img src="./assets/img/${habbit.icon}.svg" alt="${habbit.name}" />`;
 
             if (activeHabbit.id === habbit.id) {
                 element.classList.add('menu__item__active');
@@ -102,7 +117,7 @@ function rerenderMenu(activeHabbit) {
         if (activeHabbit.id === habbit.id) {
             existed.classList.add('menu__item__active');
         } else {
-            existed.classList.remove('menu__item_active');
+            existed.classList.remove('menu__item__active');
         }
     }
 }
@@ -133,6 +148,13 @@ function rerenderContent(activeHabbit) {
 }
 
 function rerender(activeHabbitId) {
+    if (!habbits.length) {
+        toggleEmptyLayout(true);
+        return;
+    }
+    toggleEmptyLayout(false);
+
+
     globalActiveHabbitId = activeHabbitId;
 
     const activeHabbit = habbits.find(habbit => habbit.id === activeHabbitId);
@@ -140,6 +162,7 @@ function rerender(activeHabbitId) {
         return;
     }
 
+    document.location.replace(document.location.pathname + '#' + activeHabbitId);
     rerenderMenu(activeHabbit);
     rerenderHead(activeHabbit);
     rerenderContent(activeHabbit);
@@ -177,7 +200,7 @@ function deleteDay(index) {
             habbit.days.splice(index, 1);
             return {
                 ...habbit,
-                days: habbit.days
+                days: habbit.days.filter((_, i) => i !== index)
             };
         }
 
@@ -188,7 +211,6 @@ function deleteDay(index) {
 }
 
 /* working with habbits */
-
 function setIcon(context, icon) {
     page.popup.iconField.value = icon;
     const activeIcon = document.querySelector('.icon.icon_active');
@@ -197,8 +219,6 @@ function setIcon(context, icon) {
 }
 
 function addHabbit(event) {
-    event.preventDefault();
-
     event.preventDefault();
 
     const data = validateAndGetFormData(event.target, ['name', 'icon', 'target']);
@@ -210,7 +230,7 @@ function addHabbit(event) {
     habbits.push({
         id: maxId + 1,
         name: data.name,
-        target: data.target,
+        target: Number(data.target),
         icon: data.icon,
         days: []
     });
@@ -224,6 +244,19 @@ function addHabbit(event) {
 /* init */
 (() => {
     loadData();
-    rerender(habbits[0].id);
+
+    if (!habbits.length) {
+        toggleEmptyLayout(true);
+        return;
+    }
+
+    const hashId = Number(document.location.hash.replace('#', ''));
+    const urlHabbit = habbits.find(habbit => habbit.id === hashId);
+    if (urlHabbit) {
+        rerender(urlHabbit.id);
+    } else {
+        rerender(habbits[0].id);
+    }
+
 })();
 
