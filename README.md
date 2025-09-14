@@ -32,3 +32,6 @@ cd HabitTracker
 ```
 
 Open index.html in a browser (or run a static server).
+
+## Live demo
+https://Aertyr98.github.io/HabitTracker/
